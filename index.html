@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send OTP via Email</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("oD8fjMzv-N542EhZB"); // ✅ Your new public key
+
+    function sendOTP() {
+      const email = document.getElementById("email").value;
+      const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+
+      const params = {
+        to_email: email,
+        otp: otp
+      };
+
+      emailjs.send("default_service", "template_7q5hsl9", params)
+        .then(function(response) {
+          alert("✅ OTP sent successfully!");
+          console.log("SUCCESS", response);
+        }, function(error) {
+          alert("❌ Failed to send OTP:\n" + JSON.stringify(error));
+          console.log("FAILED", error);
+        });
+    }
+  </script>
+</head>
+<body><center>
+  <h2>Send OTP via Email</h2>
+  <input type="email" id="email" placeholder="Enter your email" required />
+  <button onclick="sendOTP()">Send OTP</button>
+</center>
+</body>
+</html>
