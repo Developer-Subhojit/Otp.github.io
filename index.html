@@ -2,47 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OTP Verification</title>
+  <title>OTP Verification with Message Box</title>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 100px;
+      margin-top: 50px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    textarea {
+      width: 80%;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      resize: none;
     }
 
     .message-box {
-      position: fixed;
-      bottom: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #4CAF50;
-      color: white;
-      padding: 20px 40px;
-      border-radius: 10px;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-      transition: bottom 0.5s ease-in-out;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.5s ease-in-out;
+      margin-top: 20px;
     }
 
     .message-box.show {
-      bottom: 30px;
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
 
   <h2>Send OTP via Email</h2>
-  <input type="email" id="email" placeholder="Enter your email" required><br><br>
-  <button onclick="sendOTP()">Send OTP</button><br><br>
+  <input type="email" id="email" placeholder="Enter your email" required><br>
+  <button onclick="sendOTP()">Send OTP</button><br>
 
-  <input type="text" id="userOtp" placeholder="Enter OTP" style="display:none;"><br><br>
+  <input type="text" id="userOtp" placeholder="Enter OTP" style="display:none;"><br>
   <button onclick="verifyOTP()" id="verifyBtn" style="display:none;">Verify OTP</button>
 
-  <div id="messageBox" class="message-box">✅ OTP Verified Successfully!</div>
+  <div id="textareaBox" class="message-box">
+    <textarea placeholder="Your message here..."></textarea>
+  </div>
 
   <script>
-    emailjs.init("oD8fjMzv-N542EhZB"); // Your public key
-
+    emailjs.init("oD8fjMzv-N542EhZB"); // ✅ Your Public Key
     let generatedOTP = "";
 
     function sendOTP() {
@@ -54,12 +66,12 @@
         otp: generatedOTP
       };
 
-      emailjs.send("service_7lj3m5h", "template_7q5hsl9", params) // <-- Replace YOUR_SERVICE_ID
-        .then(function() {
+      emailjs.send("service_7lj3m5h", "template_7q5hsl9", params)
+        .then(() => {
           alert("✅ OTP sent!");
           document.getElementById("userOtp").style.display = "inline";
           document.getElementById("verifyBtn").style.display = "inline";
-        }, function(error) {
+        }, (error) => {
           alert("❌ Failed to send OTP: " + JSON.stringify(error));
         });
     }
@@ -67,9 +79,9 @@
     function verifyOTP() {
       const userOtp = document.getElementById("userOtp").value;
       if (userOtp === generatedOTP) {
-        document.getElementById("messageBox").classList.add("show");
+        document.getElementById("textareaBox").classList.add("show");
       } else {
-        alert("❌ Invalid OTP. Please try again.");
+        alert("❌ Invalid OTP. Try again.");
       }
     }
   </script>
