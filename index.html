@@ -43,54 +43,52 @@
 <body>
 <form action="https://api.web3forms.com/submit" method="POST">
 
-    <!-- Replace with your Access Key -->
-    <input type="hidden" name="access_key" value="10af7368-7fd7-4b20-91a6-25bbb4549f33">
+  <input type="hidden" name="access_key" value="10af7368-7fd7-4b20-91a6-25bbb4549f33">
   
   <h2>Send OTP via Email</h2>
   <input type="email" id="email" name="email" placeholder="Enter your email" required><br>
-  <button onclick="sendOTP()">Send OTP</button><br>
+  <button type="button" onclick="sendOTP()">Send OTP</button><br>
 
   <input type="text" id="userOtp" placeholder="Enter OTP" style="display:none;"><br>
-  <button onclick="verifyOTP()" id="verifyBtn" style="display:none;">Verify OTP</button>
+  <button type="button" onclick="verifyOTP()" id="verifyBtn" style="display:none;">Verify OTP</button>
 
   <div id="textareaBox" class="message-box">
-    <textarea placeholder="Your message here..."></textarea>
+    <textarea name="message" placeholder="Your message here..." required></textarea>
     <button type="submit">Submit Form</button>
   </div>
 </form>
 
-  <script>
-    emailjs.init("oD8fjMzv-N542EhZB"); // ✅ Your Public Key
-    let generatedOTP = "";
+<script>
+  emailjs.init("oD8fjMzv-N542EhZB"); // Your Public Key
+  let generatedOTP = "";
 
-    function sendOTP() {
-      const email = document.getElementById("email").value;
-      generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  function sendOTP() {
+    const email = document.getElementById("email").value;
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-      const params = {
-        to_email: email,
-        otp: generatedOTP
-      };
+    const params = {
+      to_email: email,
+      otp: generatedOTP
+    };
 
-      emailjs.send("service_7lj3m5h", "template_7q5hsl9", params)
-        .then(() => {
-          alert("✅ OTP sent!");
-          document.getElementById("userOtp").style.display = "inline";
-          document.getElementById("verifyBtn").style.display = "inline";
-        }, (error) => {
-          alert("❌ Failed to send OTP: " + JSON.stringify(error));
-        });
+    emailjs.send("service_7lj3m5h", "template_7q5hsl9", params)
+      .then(() => {
+        alert("✅ OTP sent!");
+        document.getElementById("userOtp").style.display = "inline";
+        document.getElementById("verifyBtn").style.display = "inline";
+      }, (error) => {
+        alert("❌ Failed to send OTP: " + JSON.stringify(error));
+      });
+  }
+
+  function verifyOTP() {
+    const userOtp = document.getElementById("userOtp").value;
+    if (userOtp === generatedOTP) {
+      document.getElementById("textareaBox").classList.add("show");
+    } else {
+      alert("❌ Invalid OTP. Try again.");
     }
-
-    function verifyOTP() {
-      const userOtp = document.getElementById("userOtp").value;
-      if (userOtp === generatedOTP) {
-        document.getElementById("textareaBox").classList.add("show");
-      } else {
-        alert("❌ Invalid OTP. Try again.");
-      }
-    }
-  </script>
-
+  }
+</script>
 </body>
 </html>
